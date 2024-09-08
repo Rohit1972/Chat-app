@@ -1,5 +1,7 @@
-import Avatar from '../../assets/avatar.jpeg'
-import Phonecall from '../../assets/phone-call.svg'
+import Avatar from '../../assets/avatar.jpeg';
+import Phonecall from '../../assets/phone-call.svg';
+import Send from '../../assets/send.jpeg';
+import Plus from '../../assets/plus.png';
 import Input from '../../components/input';
 import React from 'react';
 
@@ -65,7 +67,7 @@ const Dashboard = () => {
             </div>
         </div>
         <div className='w-[50%]  h-screen bg-white flex flex-col items-center'>
-            <div className='w-[75%] bg-secondary h-[80px] mt-14 rounded-full flex items-center px-14'>
+            <div className='w-[75%] bg-secondary h-[80px] my-14 rounded-full flex items-center px-14 '>
                 <div className='cursor-pointer'><img src= {Avatar} width={60} height={60}/></div>
                 <div className='ml-6 mr-auto'>
                 <h3 className='text-lg'>Harry</h3>
@@ -75,7 +77,7 @@ const Dashboard = () => {
                     <img src={Phonecall} width={24} height={24}></img>
                 </div>
             </div>
-            <div className='h-[75%]  w-full overflow-scroll border-b' >
+            <div className='h-[75%]  w-full overflow-scroll shadow-sm' >
                 <div className=' p-14'>
                     
                 <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
@@ -129,11 +131,17 @@ const Dashboard = () => {
 
                 </div>
             </div>
-            <div className='w-full p-14'>
+            <div className='flex items-center w-full p-14'>
                 <Input placeholder='Type a message....' className='w-[75%]' inputClassName='p-4 border-0 shadow-md rounded-full bg-light focus:ring-0 focus:border-0 outline-none' />
+                <div className= 'p-2 ml-4 rounded-full cursor-pointer bg-light'>
+                    <img src={Send} width={30} height={30}/>
+                </div>
+                <div className= 'p-2 ml-4 rounded-full cursor-pointer bg-light'>
+                    <img src={Plus} width={30} height={30}/>
+                    </div>
             </div>
         </div>
-        <div className='w-[25%]  h-screen'></div>
+        <div className='w-[25%]  h-screen bg-light'></div>
     </div>
   );
 }
