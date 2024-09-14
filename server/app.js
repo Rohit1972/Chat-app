@@ -1,6 +1,7 @@
 const express = require("express");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cors =require ("cors");
 
 const app = express();
 //Connect DB
@@ -16,6 +17,7 @@ const port = process.env.PORT || 8000;
 //App use
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 //Routes
 app.get("/", (req, res) => {
@@ -79,15 +81,16 @@ app.post("/api/login", async (req, res, next) => {
                 }
               );
               user.save();
-              next();
+              return res
+              .status(200)
+              .json({
+                user: { id:user._id,email: user.email, fullName: user.fullName },
+                token: token
+              });
             }
           );
-          res
-            .status(200)
-            .json({
-              user: { email: user.email, fullName: user.fullName },
-              token: user.token,
-            });
+          console.log(user.token,'token');
+          
         }
       }
     }
@@ -123,7 +126,8 @@ app.get("/api/conversation/:userId", async (req, res) => {
         const receiverId = conversation.members.find(
           (member) => member !== userId
         );
-        return await Users.findById(receiverId);
+        const user= await Users.findById(receiverId);
+        return{user :{email:user.email,fullName:user.fullName},conversationId: conversation._id}
       })
     );
 
