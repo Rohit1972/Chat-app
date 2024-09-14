@@ -23,7 +23,28 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Welcome");
 });
-
+app.post("/changepassword",async (req,res) =>{
+  const {email,newPassword}=req.body;
+  if(!email){
+    return res.status(400).json({sucess:false,message:'Enter email please'})
+  }
+  const user = await Users.findOne({ email });
+  if(!user){
+    return res.status(404).json({sucess:false,message:'user not found'})
+  }
+  bcryptjs.hash(newPassword, 10, async function(err,hashedPassword) {
+    // Store hash in your password DB.
+    await Users.updateOne(
+      {email:email},
+      {
+        $set: { password:hashedPassword},
+      },
+      {upsert:true},
+    );
+     user.save();
+    return res.status(200).json({sucess:true,message:"password is changed"});
+});
+})
 app.post("/api/register", async (req, res, next) => {
   try {
     const { fullName, email, password } = req.body;
