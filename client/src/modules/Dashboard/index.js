@@ -5,31 +5,14 @@ import Plus from '../../assets/plus.png';
 import Input from '../../components/input';
 import React, { useEffect, useState } from 'react';
 
-const Dashboard = () => {
-    const contacts =[
-        {
-            name:'John',
-            status: 'Available',
-            img:Avatar
-        },
-        {
-            name:'Marry',
-            status: 'Available',
-            img:Avatar
-        },
-        {
-            name:'Harry',
-            status: 'Available',
-            img:Avatar
-        },
-        {
-            name:'Lisa',
-            status: 'Available',
-            img:Avatar
-        },
-       
 
-    ]
+const Dashboard = () => {
+ const [user,setUser] =useState(JSON.parse(localStorage.getItem('user:detail')))
+    const [conversation, setConversation]=useState([])
+    const [messages, setMessages]=useState({})
+    console.log('user :>>',user) 
+    console.log('conversation :>>',conversation);
+    console.log('messages :>>',messages);
 
     useEffect(()=>{
         const loggedInUser =JSON.parse(localStorage.getItem('user:detail'))
@@ -46,10 +29,18 @@ const Dashboard = () => {
         fetchConversations()
     },[])
 
-    const [user,setUser] =useState(JSON.parse(localStorage.getItem('user:detail')))
-    const [conversation, setConversation]=useState([])
-    console.log('user :>>',user) 
-    console.log('conversation :>>',conversation);
+const fetchMessages =async(conversationId ,user)=>{
+    const res =await fetch(`http://localhost:8000/api/message/${conversationId}`,{
+        method: 'GET',
+        headers:{
+            'Content-Type':'application/json',
+        }
+    });
+    const resData =await res.json()
+    console.log('resData :>>',resData);
+    setMessages({messages: resData,receiver: user})
+}
+
   return (
     <div className='flex w-screen '>
         <div className='w-[25%] h-screen bg-secondary'>
@@ -65,10 +56,11 @@ const Dashboard = () => {
                 <div className='text-lg text-primary'>Messages</div>
                 <div>
                     {
+                        conversation.length>0? 
                         conversation.map(({conversationId,user})=>{
                             return(
                                 <div className='flex items-center py-8 border-b border-b-gray-300'>
-                                    <div className='flex items-center cursor-pointer'>
+                                    <div className='flex items-center cursor-pointer'onClick={()=> fetchMessages(conversationId)}>
                 <div  ><img src= {Avatar} width={60} height={60}/></div>
                 <div className='ml-6'>
                             <h3 className='text-lg font-semibold'>{user?.fullName}</h3>
@@ -77,73 +69,41 @@ const Dashboard = () => {
                             </div>
                             </div>
                             )
-                    })
+                    }) : <div className ='mt-24 text-lg font-semibold text-center'>No Conversations</div>
                 }    
                 </div>
             </div>
         </div>
         <div className='w-[50%]  h-screen bg-white flex flex-col items-center'>
-            <div className='w-[75%] bg-secondary h-[80px] my-14 rounded-full flex items-center px-14 '>
-                <div className='cursor-pointer'><img src= {Avatar} width={60} height={60}/></div>
-                <div className='ml-6 mr-auto'>
-                <h3 className='text-lg'>Harry</h3>
-                <p className='text-sm font-light text-gray-600'>online</p>
-                </div>
+        {
+            messages?.receiver?.fullName &&
+            <div className='w-[75%] bg-secondary h-[80px]my-14 rounded-full flex items-center px-14 py-2'>
                 <div className='cursor-pointer'>
-                    <img src={Phonecall} width={24} height={24}></img>
-                </div>
+                    <img src={ Avatar} alt='User picture' width={60} height={60} className='rounded-full' /></div>
+                    <div className='ml-6 mr-auto'>
+                        <h3 className= 'text-lg'>{messages?.receiver?.fullName}</h3>
+                        <p className='text-sm font-light text-gray-600'>{messages?.receiver?.email}</p>
+                        </div>
+                        <div className= 'cursor-pointer'>
+                            <img src= {Phonecall} alt='Phone call picture' width={24} height={24} className='rounded-full'></img>
+                            </div>
             </div>
+            
+        }
             <div className='h-[75%]  w-full overflow-scroll shadow-sm' >
                 <div className=' p-14'>
                     
-                <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
-                    <div className=' max-w-[40%] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-6'>
-                        Hi,Rohit
-                    </div>
-                    <div className=' max-w-[40%] bg-primary rounded-b-xl rounded-tl-xl ml-auto p-4 text-white mb-6'>
-                        Hi, Rajat Are you giving paid services
-                    </div>
+                
+                    
+                    {
+                        messages?.messages?.length>0?
+                        messages.messages.map(({message,user :{id}={}})=>{
+
+                            return(
+                                <div className={` max-w-[40%] rounded-b-xl   p-4  mb-6 ${id=== user?.id ? 'bg-primary ml-auto rounded-tl-xl text-white':'bg-secondary rounded-tr-xl'}`}>{message}</div>
+                            ) 
+                        }): <div className='mt-24 text-lg font-semibold text-center'>No Messages</div>
+                    }
 
                 </div>
             </div>
